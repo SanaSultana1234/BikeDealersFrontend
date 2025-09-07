@@ -1,0 +1,29 @@
+<div class="container mt-4">
+    <h2>Add New Bike</h2>
+    <form [formGroup]="addBikeForm" (ngSubmit)="onSubmit()">
+  
+      <div class="form-group mb-3">
+        <label for="modelName">Model Name</label>
+        <input type="text" id="modelName" formControlName="modelName" class="form-control" placeholder="Enter Model Name" />
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="modelYear">Model Year</label>
+        <input type="number" id="modelYear" formControlName="modelYear" class="form-control" placeholder="Enter Model Year" />
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="engineCC">Engine CC</label>
+        <input type="number" id="engineCC" formControlName="engineCC" class="form-control" placeholder="Enter Engine CC" />
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="manufacturer">Manufacturer</label>
+        <input type="text" id="manufacturer" formControlName="manufacturer" class="form-control" placeholder="Enter Manufacturer" />
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="addBikeForm.invalid">Add Bike</button>
+      <button type="button" class="btn btn-grey btn-gray" (click)="onCancelAdd()">Cancel</button>
+    </form>
+  </div>
+  

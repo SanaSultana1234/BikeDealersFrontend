@@ -1,0 +1,51 @@
+<a class="btn btn-primary mb-3" routerLink="/addDM">Deliver Bikes to a Dealer</a>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Dealer Masters Data
+  </div>
+  <div class="card-body">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>DM ID</th>
+          <th>Dealer ID</th>
+          <th>Bike ID</th>
+          <th>Bikes Delivered</th>
+          <th>Delivery Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dm of DMs">
+          <td>{{ dm.dealerMasterId }}</td>
+
+          <!-- Dealer ID -->
+          <td *ngIf="!dm.isEditing">{{ dm.dealerId }}</td>
+          <td *ngIf="dm.isEditing"><input [(ngModel)]="dm.dealerId" class="form-control" /></td>
+
+          <!-- Bike ID -->
+          <td *ngIf="!dm.isEditing">{{ dm.bikeId }}</td>
+          <td *ngIf="dm.isEditing"><input [(ngModel)]="dm.bikeId" class="form-control" /></td>
+
+          <!-- Bikes Delivered -->
+          <td *ngIf="!dm.isEditing">{{ dm.bikesDelivered }}</td>
+          <td *ngIf="dm.isEditing"><input [(ngModel)]="dm.bikesDelivered" type="number" class="form-control" /></td>
+
+          <!-- Delivery Date -->
+          <td *ngIf="!dm.isEditing">{{ dm.deliveryDate }}</td>
+          <td *ngIf="dm.isEditing"><input [(ngModel)]="dm.deliveryDate" type="date" class="form-control" /></td>
+
+          <!-- Actions -->
+          <td>
+            <button *ngIf="!dm.isEditing" (click)="onEdit(dm)" class="btn btn-warning me-2">Edit</button>
+            <button *ngIf="dm.isEditing" (click)="onSave(dm)" class="btn btn-success me-2">Save</button>
+
+            <button class="btn btn-danger" (click)="onDelete(dm)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

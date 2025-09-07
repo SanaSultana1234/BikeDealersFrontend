@@ -1,0 +1,30 @@
+<div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Employee Data
+    </div>
+    <div class="card-body">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start date</th>
+            <th>Salary</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of employees">
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.position }}</td>
+            <td>{{ emp.office }}</td>
+            <td>{{ emp.age }}</td>
+            <td>{{ emp.startDate }}</td>
+            <td>{{ emp.salary | currency:'USD' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>

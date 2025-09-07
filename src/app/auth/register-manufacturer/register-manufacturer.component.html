@@ -1,0 +1,66 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-lg border-0 rounded-lg">
+          <div class="card-header">
+            <h3 class="text-center font-weight-light my-4">Create Manufacturer Account</h3>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              
+              <div class="form-floating mb-3">
+                <input formControlName="username" class="form-control" placeholder="Dealer" />
+                <label>Manufacturer Username</label>
+              </div>
+  
+              <div class="form-floating mb-3">
+                <input formControlName="email" type="email" class="form-control" placeholder="name@example.com" />
+                <label>Email address</label>
+              </div>
+  
+              <div class="form-floating mb-3">
+                <input formControlName="address" class="form-control" placeholder="Enter Address" />
+                <label>Address</label>
+              </div>
+  
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-floating mb-3">
+                    <input type="password" formControlName="password" class="form-control" placeholder="Password" />
+                    <label>Password</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating mb-3">
+                    <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                    <label>Confirm Password</label>
+                  </div>
+                </div>
+              </div>
+                <div class="form-floating mb-3">
+                    <input type="text" formControlName="companyName" class="form-control" placeholder="Company Name" />
+                    <label> Company Name</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" formControlName="registrationNumber" class="form-control" placeholder="Company Registration Number" />
+                    <label>Registration Number</label>
+                </div>
+
+              <div class="d-grid">
+                <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+              </div>
+            </form>
+  
+            <!-- Success / Error messages -->
+            <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+          </div>
+          <div class="card-footer text-center py-3">
+            <div class="small"><a routerLink="/login">Have an account? Go to login</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

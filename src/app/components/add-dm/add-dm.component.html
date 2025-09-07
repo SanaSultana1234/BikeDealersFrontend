@@ -1,0 +1,29 @@
+<div class="container mt-4">
+    <h2>Deliver Bikes to a Dealer</h2>
+    <form [formGroup]="addDMForm" (ngSubmit)="onSubmit()">
+  
+      <div class="form-group mb-3">
+        <label for="dealerId">Dealer ID</label>
+        <input type="number" id="dealerId" formControlName="dealerId" class="form-control" placeholder="Enter Dealer ID" />
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="bikeId">Bike ID</label>
+        <input type="number" id="bikeId" formControlName="bikeId" class="form-control" placeholder="Enter Bike ID" />
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="bikesDelivered">Bikes Delivered</label>
+        <input type="number" id="bikesDelivered" formControlName="bikesDelivered" class="form-control" placeholder="Enter number of bikes delivered" />
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="deliveryDate">Delivery Date</label>
+        <input type="date" id="deliveryDate" formControlName="deliveryDate" class="form-control" />
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="addDMForm.invalid">Deliver Bikes</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="onCancelAdd()">Cancel</button>
+    </form>
+  </div>
+  

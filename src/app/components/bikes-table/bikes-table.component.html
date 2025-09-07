@@ -1,0 +1,53 @@
+<a class="btn btn-primary mb-3" routerLink="/addBike">Add Bike</a>
+<div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Bikes Data
+    </div>
+    <div class="card-body">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Bike ID</th>
+            <th>Model Name</th>
+            <th>Model Year</th>
+            <th>EngineCC</th>
+            <th>Manufacturer</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bike of bikes">
+            <td>{{ bike.bikeId }}</td>
+            <td>
+              <span *ngIf="!bike.isEditing">{{ bike.modelName }}</span>
+              <input *ngIf="bike.isEditing" [(ngModel)]="bike.modelName" class="form-control" />
+            </td>
+            <td>
+              <span *ngIf="!bike.isEditing">{{ bike.modelYear }}</span>
+              <input *ngIf="bike.isEditing" type="number" [(ngModel)]="bike.modelYear" class="form-control" />
+            </td>
+            <td>
+              <span *ngIf="!bike.isEditing">{{ bike.engineCc }}</span>
+              <input *ngIf="bike.isEditing" type="number" [(ngModel)]="bike.engineCc" class="form-control" />
+            </td>
+            <td>
+              <span *ngIf="!bike.isEditing">{{ bike.manufacturer }}</span>
+              <input type="text" *ngIf="bike.isEditing" [(ngModel)]="bike.manufacturer" class="form-control" />
+            </td>
+            <td>
+               <!-- Toggle button text -->
+          <button class="btn btn-warning btn-sm me-2" (click)="toggleEdit(bike)">
+            {{ bike.isEditing ? 'Save' : 'Edit' }}
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteBike(bike)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+  <ng-template #noBikes>
+    <p>No bikes available. Add some!</p>
+  </ng-template>
+</div>

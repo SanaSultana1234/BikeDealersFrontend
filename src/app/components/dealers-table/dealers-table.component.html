@@ -1,0 +1,80 @@
+<div class="card mb-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Dealers Data
+  </div>
+  <div class="card-body">
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-bordered table-striped"
+    >
+      <thead>
+        <tr>
+          <th>Dealer ID</th>
+          <th>Dealer Name</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zipcode</th>
+          <th>Storage Capacity</th>
+          <th>Inventory</th>
+          <th>User ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dealer of dealers">
+          <td>{{ dealer.dealerId }}</td>
+
+          <td>
+            <span *ngIf="!dealer.isEditing">{{ dealer.dealerName }}</span>
+            <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.dealerName" class="form-control" />
+          </td>
+
+          <td>
+            <span *ngIf="!dealer.isEditing">{{ dealer.address }}</span>
+            <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.address" class="form-control" />
+          </td>
+
+          <td>
+            <span *ngIf="!dealer.isEditing">{{ dealer.city }}</span>
+            <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.city" class="form-control" />
+          </td>
+
+          <td>
+            <span *ngIf="!dealer.isEditing">{{ dealer.state }}</span>
+            <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.state" class="form-control" />
+          </td>
+
+          <td>
+            <span *ngIf="!dealer.isEditing">{{ dealer.zipCode }}</span>
+            <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.zipCode" class="form-control" />
+          </td>
+
+          <td>
+            <span *ngIf="!dealer.isEditing">{{ dealer.storageCapacity }}</span>
+            <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.storageCapacity" class="form-control" />
+          </td>
+
+          <td>
+            <span *ngIf="!dealer.isEditing">{{ dealer.inventory }}</span>
+            <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.inventory" class="form-control" />
+          </td>
+
+          <td>
+            {{ dealer.userId }}
+          </td>
+
+          <td>
+            <button class="btn btn-warning btn-sm me-2" (click)="toggleEdit(dealer)">
+              {{ dealer.isEditing ? "Save" : "Edit" }}
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteDealer(dealer)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
