@@ -13,11 +13,21 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
+  getUserCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/users/count`);
+  }
+
   getAllUsers(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(`${this.baseUrl}/list-users`)
                 .pipe(retry(1), catchError(this.errorHandler));
   }
 
+  getUserById(userId: string): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.baseUrl}/get-user/${userId}`)
+      .pipe(retry(1), catchError(this.errorHandler));
+  }
+
+  
   approveDealer(userId: String): Observable<any> {
     return this.http.post(`${this.baseUrl}/approve-dealer/${userId}`, {})
       .pipe(retry(1), catchError(this.errorHandler));

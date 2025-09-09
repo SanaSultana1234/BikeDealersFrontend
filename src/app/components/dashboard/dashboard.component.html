@@ -1,2 +1,100 @@
-<p>This is error for timebeing works!</p>
-<app-table></app-table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Bike Dealer Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+  <div class="container-fluid p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 fw-bold">
+        <i class="fas fa-tachometer-alt me-2 text-primary"></i> Admin Dashboard
+      </h1>
+      <div class="d-flex align-items-center bg-white p-2 rounded shadow-sm">
+        <i class="fas fa-user-circle fa-2x me-2 text-secondary"></i>
+        <div>
+          <div class="fw-bold">{{ adminName }}</div>
+          <small class="text-muted">Administrator</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row g-4 mb-4">
+      <!-- Dealers Card -->
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100 text-center" (click)="navigateTo(cardData[0].route)" style="cursor:pointer;">
+          <div class="card-body">
+            <i class="fas fa-store fa-3x text-primary mb-3"></i>
+            <h5 class="card-title">{{ cardData[0].title }}</h5>
+            <h2 class="fw-bold">
+              {{ dealersCount || 0 }}
+            </h2>
+            <p class="text-muted">{{ cardData[0].description }}</p>
+          </div>
+          <div class="card-footer bg-white border-0 text-primary fw-semibold">
+            View all dealers <i class="fas fa-arrow-right ms-2"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Card -->
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100 text-center" (click)="navigateTo(cardData[1].route)" style="cursor:pointer;">
+          <div class="card-body">
+            <i class="fas fa-users fa-3x text-success mb-3"></i>
+            <h5 class="card-title">{{ cardData[1].title }}</h5>
+            <h2 class="fw-bold">
+              {{ usersCount || 0 }}
+            </h2>
+            <p class="text-muted">{{ cardData[1].description }}</p>
+          </div>
+          <div class="card-footer bg-white border-0 text-success fw-semibold">
+            View all users <i class="fas fa-arrow-right ms-2"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bikes Card -->
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100 text-center" (click)="navigateTo(cardData[2].route)" style="cursor:pointer;">
+          <div class="card-body">
+            <i class="fas fa-motorcycle fa-3x text-warning mb-3"></i>
+            <h5 class="card-title">{{ cardData[2].title }}</h5>
+            <h2 class="fw-bold">
+              {{ bikesCount || 0 }}
+            </h2>
+            <p class="text-muted">{{ cardData[2].description }}</p>
+          </div>
+          <div class="card-footer bg-white border-0 text-warning fw-semibold">
+            View all bikes <i class="fas fa-arrow-right ms-2"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- DealerMaster Card -->
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100 text-center" (click)="navigateTo('/dmTable')" style="cursor:pointer;">
+          <div class="card-body">
+            <i class="fas fa-truck-loading fa-3x text-danger mb-3"></i>
+            <h5 class="card-title">Manage Deliveries</h5>
+            <h2 class="fw-bold">
+              {{ deliveriesCount || 0 }}
+            </h2>
+            <p class="text-muted">Total deliveries assigned to dealers</p>
+          </div>
+          <div class="card-footer bg-white border-0 text-danger fw-semibold">
+            Manage deliveries <i class="fas fa-arrow-right ms-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

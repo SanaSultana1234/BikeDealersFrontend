@@ -41,7 +41,27 @@ export class AuthService {
     )
   }
 
+  getUserName(): string | null {
+    const token = localStorage.getItem('Token');
+    if (!token) return null;
+  
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Adjust field depending on your backend payload (email, name, unique_name etc.)
+      console.log("payload from auth serive: ", payload)
+      return payload?.username || payload?.email || null;
+    } catch (e) {
+      console.error("Invalid token", e);
+      return null;
+    }
+  }
+  
 
+  getUserRole(): string {
+    const userRole = localStorage.getItem('userRole') || '{}';
+    return userRole;
+  }
+  
   registerUser(model: UserRegister): Observable<any> {
     return this.http.post<UserRegister>(`${this.baseUrl}/register-user`, model)
           .pipe(retry(1), catchError(this.errorHandler));
@@ -60,7 +80,7 @@ export class AuthService {
   isLoggedIn() {
     let role = localStorage.getItem('userRole');
     let token = localStorage.getItem('Token');
-    if((role === 'Admin' || role === 'User' || role==='Dealer' || role==='Manufacturer') && token!=null) return true;
+    if((role?.includes('Admin') || role?.includes('User')  ||role?.includes('Dealer') || role?.includes('Manufacturer')) && token!=null) return true;
     return false;
   }
 
@@ -71,7 +91,7 @@ export class AuthService {
   }
 
   isAdmin() {
-    return localStorage.getItem('userRole')==='Admin';
+    return localStorage.getItem('userRole')?.includes('Admin');
   }
 
   logout() {

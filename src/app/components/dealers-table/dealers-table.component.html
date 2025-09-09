@@ -1,33 +1,32 @@
-<div class="card mb-4">
-  <div class="card-header">
-    <i class="fas fa-table me-1"></i>
-    Dealers Data
+<div class="card mb-4 shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <i class="fas fa-store-alt me-2"></i> Dealers Data
   </div>
   <div class="card-body">
     <table
       datatable
       [dtOptions]="dtOptions"
       [dtTrigger]="dtTrigger"
-      class="table table-bordered table-striped"
+      class="table table-bordered table-striped table-hover align-middle"
     >
-      <thead>
+      <thead class="table-light">
         <tr>
           <th>Dealer ID</th>
-          <th>Dealer Name</th>
-          <th>Address</th>
-          <th>City</th>
-          <th>State</th>
-          <th>Zipcode</th>
-          <th>Storage Capacity</th>
-          <th>Inventory</th>
-          <th>User ID</th>
-          <th>Actions</th>
+          <th><i class="fas fa-user me-1"></i> Dealer Name</th>
+          <th><i class="fas fa-map-marker-alt me-1"></i> Address</th>
+          <th><i class="fas fa-city me-1"></i> City</th>
+          <th><i class="fas fa-flag me-1"></i> State</th>
+          <th><i class="fas fa-mail-bulk me-1"></i> Zipcode</th>
+          <th><i class="fas fa-warehouse me-1"></i> Storage Capacity</th>
+          <th><i class="fas fa-boxes me-1"></i> Inventory</th>
+          <th class="text-center"><i class="fas fa-cogs me-1"></i> Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let dealer of dealers">
           <td>{{ dealer.dealerId }}</td>
 
+          <!-- Editable Fields -->
           <td>
             <span *ngIf="!dealer.isEditing">{{ dealer.dealerName }}</span>
             <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.dealerName" class="form-control" />
@@ -63,15 +62,15 @@
             <input *ngIf="dealer.isEditing" [(ngModel)]="dealer.inventory" class="form-control" />
           </td>
 
-          <td>
-            {{ dealer.userId }}
-          </td>
-
-          <td>
+          <!-- Actions -->
+          <td class="text-center">
             <button class="btn btn-warning btn-sm me-2" (click)="toggleEdit(dealer)">
+              <i class="fas" [ngClass]="dealer.isEditing ? 'fa-save' : 'fa-edit'"></i>
               {{ dealer.isEditing ? "Save" : "Edit" }}
             </button>
-            <button class="btn btn-danger btn-sm" (click)="deleteDealer(dealer)">Delete</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteDealer(dealer)">
+              <i class="fas fa-trash-alt"></i> Delete
+            </button>
           </td>
         </tr>
       </tbody>

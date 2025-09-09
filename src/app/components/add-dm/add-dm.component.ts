@@ -1,9 +1,11 @@
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DealerMasterService } from '../../Services/dealer-master.service';
+import { BikeService } from '../../Services/bike.service';
+import { DealerService } from '../../Services/dealer.service';
 import { DealerMasterModel } from '../../models/data/dealer-master-model';
 
 @Component({
@@ -16,9 +18,15 @@ import { DealerMasterModel } from '../../models/data/dealer-master-model';
 export class AddDMComponent {
   addDMForm: FormGroup;
 
+  bikes: any[] = [];   // will store list of bikes
+  dealers: any[] = []; // will store list of dealers
+  selectedDealer: any | null = null; // store selected dealer
+
   constructor(
     private fb: FormBuilder,
     private dmService: DealerMasterService,
+    private bikeService: BikeService,
+    private dealerService: DealerService,
     private router: Router
   ) {
     this.addDMForm = this.fb.group({
@@ -26,6 +34,50 @@ export class AddDMComponent {
       bikeId: ['', Validators.required],
       bikesDelivered: ['', Validators.required],
       deliveryDate: ['', Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadBikes();
+    this.loadDealers();
+
+     // Watch dealerId selection and update selectedDealer
+     this.addDMForm.get('dealerId')?.valueChanges.subscribe((dealerId) => {
+      this.selectedDealer = this.dealers.find(d => d.dealerId == dealerId) || null;
+      this.addDMForm.get('bikesDelivered')?.updateValueAndValidity();
+    });
+
+    // Custom validator for bikesDelivered (depends on selected dealer)
+    this.addDMForm.get('bikesDelivered')?.setValidators([
+      Validators.required,
+      Validators.min(1),
+      (control: AbstractControl): ValidationErrors | null => {
+        if (!this.selectedDealer) return null;
+        const maxAllowed = this.selectedDealer.storageCapacity - this.selectedDealer.inventory;
+        return control.value > maxAllowed ? { exceedCapacity: true } : null;
+      }
+    ]);
+  }
+
+  loadBikes() {
+    this.bikeService.getBikes().subscribe({
+      next: (res) => {
+        this.bikes = res;
+      },
+      error: (err) => {
+        console.error('Error fetching bikes:', err);
+      }
+    });
+  }
+
+  loadDealers() {
+    this.dealerService.getDealers().subscribe({
+      next: (res) => {
+        this.dealers = res;
+      },
+      error: (err) => {
+        console.error('Error fetching dealers:', err);
+      }
     });
   }
 

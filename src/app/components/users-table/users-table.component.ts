@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { Subject } from 'rxjs';
 import { DataTablesModule } from 'angular-datatables';
 import DataTables from 'datatables.net';
@@ -7,12 +7,13 @@ import { UserModel } from '../../models/data/user-model';
 import { AdminService } from '../../Services/admin.service';
 import { DataTableDirective } from 'angular-datatables';
 import { Api } from 'datatables.net';   // <-- import Api type
+import { DealerMasterService } from '../../Services/dealer-master.service';
 
 
 @Component({
   selector: 'app-users-table',
   standalone: true,
-  imports: [DataTablesModule, CommonModule],
+  imports: [DataTablesModule, CommonModule, NgClass],
   templateUrl: './users-table.component.html',
   styleUrl: './users-table.component.css'
 })
@@ -28,7 +29,7 @@ export class UsersTableComponent {
   @ViewChild(DataTableDirective, {static: false})
   dtElement!: DataTableDirective;
 
-  constructor(private adminService: AdminService) {
+  constructor(private adminService: AdminService, private dealerMasterService: DealerMasterService) {
     //this.getUsers();
   }
   ngOnInit(): void {
@@ -137,6 +138,64 @@ export class UsersTableComponent {
       error: (err) => console.error(err)
     });
   }
+
+   // ✅ Before removing dealer role → check DealerMaster
+   confirmToggleDealer(user: any) {
+    if (user.isDealerVerified) {
+      // Removing dealer → check if exists in DealerMaster
+      this.dealerMasterService.getBikesByDealer(user.userName).subscribe({
+        next: (bikes) => {
+          if (bikes && bikes.length > 0) {
+            alert("❌ Cannot remove Dealer role. This user is assigned in DealerMaster.");
+          } else {
+            const action = user.isDealerVerified ? 'remove' : 'assign';
+            if (confirm(`Are you sure you want to ${action} Dealer role for user: ${user.userName}?`)) {
+              this.toggleDealer(user);
+            }// Safe to remove
+          }
+        },
+        error: (err) => {
+          // API returned not found / error → assume safe
+          //this.toggleDealer(user);
+          console.error(err);
+        }
+      });
+    } else {
+      // Assign dealer directly
+      this.toggleDealer(user);
+    }
+  }
+
+
+confirmToggleManufacturer(user: UserModel) {
+  const action = user.isManufacturerVerified ? 'remove' : 'assign';
+  if (confirm(`Are you sure you want to ${action} Manufacturer role for user: ${user.userName}?`)) {
+    this.toggleManufacturer(user);
+  }
+}
+
+confirmToggleAdmin(user: UserModel) {
+  const action = user.roles.includes('Admin') ? 'remove' : 'assign';
+  if (confirm(`Are you sure you want to ${action} Admin role for user: ${user.userName}?`)) {
+    this.toggleAdmin(user);
+  }
+}
+
+ // ✅ Delete user → show alert if backend refuses because of DealerMaster
+ confirmDeleteUser(user: any) {
+  if (confirm(`Are you sure you want to delete ${user.userName}?`)) {
+    this.adminService.deleteUser(user.id).subscribe({
+      next: () => {
+        this.users = this.users.filter(u => u.id !== user.id);
+      },
+      error: (err) => {
+        console.error(err);
+        alert("❌ Unable to delete this user. They might be assigned in DealerMaster.");
+      }
+    });
+  }
+}
+
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();

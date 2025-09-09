@@ -11,9 +11,22 @@ export class DealerService {
   private baseUrl = 'https://localhost:7273/api/Dealers';
   constructor(private http: HttpClient) { }
 
+  getDealerCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/count`);
+  }
+
   getDealers(): Observable<DealerModel[]> {
     return this.http.get<DealerModel[]>(this.baseUrl)
             .pipe(retry(1), catchError(this.errorHandler));
+  }
+
+  getDealersByName(name: string): Observable<DealerModel[]> {
+    return this.http.get<DealerModel[]>(`${this.baseUrl}/search?name=${name}`)
+      .pipe(retry(1), catchError(this.errorHandler));
+  }
+
+  getDealerByUserId(userId: string) {
+    return this.http.get<DealerModel>(`${this.baseUrl}/${userId}`);
   }
 
   updateDealer(id: any, dealer: any): Observable<any> {

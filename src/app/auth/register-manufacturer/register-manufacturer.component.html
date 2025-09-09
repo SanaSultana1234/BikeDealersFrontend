@@ -1,66 +1,201 @@
 <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="card shadow-lg border-0 rounded-lg">
-          <div class="card-header">
-            <h3 class="text-center font-weight-light my-4">Create Manufacturer Account</h3>
-          </div>
-          <div class="card-body">
-            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-              
-              <div class="form-floating mb-3">
-                <input formControlName="username" class="form-control" placeholder="Dealer" />
-                <label>Manufacturer Username</label>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-primary text-white">
+          <h3 class="text-center my-2">
+            <i class="fas fa-industry me-2"></i> Create Manufacturer Account
+          </h3>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <!-- Username -->
+            <div class="form-floating mb-3">
+              <input
+                formControlName="username"
+                class="form-control"
+                placeholder="Username"
+              />
+              <label><i class="fas fa-user me-2"></i> Username</label>
+              <div
+                class="text-danger small"
+                *ngIf="
+                  submitted &&
+                  registerForm.get('username')?.touched &&
+                  registerForm.get('username')?.invalid
+                "
+              >
+                Username is required
               </div>
-  
-              <div class="form-floating mb-3">
-                <input formControlName="email" type="email" class="form-control" placeholder="name@example.com" />
-                <label>Email address</label>
+            </div>
+
+            <!-- Email -->
+            <div class="form-floating mb-3">
+              <input
+                formControlName="email"
+                type="email"
+                class="form-control"
+                placeholder="name@example.com"
+              />
+              <label><i class="fas fa-envelope me-2"></i> Email</label>
+              <div
+                class="text-danger small"
+                *ngIf="
+                  submitted &&
+                  registerForm.get('email')?.touched &&
+                  registerForm.get('email')?.invalid
+                "
+              >
+                <span *ngIf="registerForm.get('email')?.errors?.['required']"
+                  >Email is required</span
+                >
+                <span *ngIf="registerForm.get('email')?.errors?.['email']"
+                  >Enter a valid email address</span
+                >
               </div>
-  
-              <div class="form-floating mb-3">
-                <input formControlName="address" class="form-control" placeholder="Enter Address" />
-                <label>Address</label>
+            </div>
+
+            <!-- Address -->
+            <div class="form-floating mb-3">
+              <input
+                formControlName="address"
+                class="form-control"
+                placeholder="Enter Address"
+              />
+              <label><i class="fas fa-map-marker-alt me-2"></i> Address</label>
+              <div
+                class="text-danger small"
+                *ngIf="
+                  submitted &&
+                  registerForm.get('address')?.touched &&
+                  registerForm.get('address')?.invalid
+                "
+              >
+                Address is required
               </div>
-  
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="password" formControlName="password" class="form-control" placeholder="Password" />
-                    <label>Password</label>
+            </div>
+
+            <!-- Password + Confirm Password -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input
+                    type="password"
+                    formControlName="password"
+                    class="form-control"
+                    placeholder="Password"
+                  />
+                  <label><i class="fas fa-lock me-2"></i> Password</label>
+                  <div
+                    class="text-danger small"
+                    *ngIf="
+                      submitted &&
+                      registerForm.get('password')?.touched &&
+                      registerForm.get('password')?.errors
+                    "
+                  >
+                    <span *ngIf="registerForm.get('password')?.errors?.['required']">
+                      Password is required
+                    </span>
+                    <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
+                      Password must be at least 8 characters
+                    </span>
+                    <span *ngIf="registerForm.get('password')?.errors?.['pattern']">
+                      Must contain 1 uppercase, 1 number, and 1 special character
+                    </span>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" />
-                    <label>Confirm Password</label>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input
+                    type="password"
+                    formControlName="confirmPassword"
+                    class="form-control"
+                    placeholder="Confirm Password"
+                  />
+                  <label><i class="fas fa-check me-2"></i> Confirm Password</label>
+                  <div
+                    class="text-danger small"
+                    *ngIf="
+                      submitted &&
+                      registerForm.errors?.['passwordMismatch'] &&
+                      registerForm.get('confirmPassword')?.touched
+                    "
+                  >
+                    Passwords do not match
                   </div>
                 </div>
               </div>
-                <div class="form-floating mb-3">
-                    <input type="text" formControlName="companyName" class="form-control" placeholder="Company Name" />
-                    <label> Company Name</label>
-                </div>
+            </div>
 
-                <div class="form-floating mb-3">
-                    <input type="text" formControlName="registrationNumber" class="form-control" placeholder="Company Registration Number" />
-                    <label>Registration Number</label>
-                </div>
-
-              <div class="d-grid">
-                <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+            <!-- Company Name -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                formControlName="companyName"
+                class="form-control"
+                placeholder="Company Name"
+              />
+              <label><i class="fas fa-building me-2"></i> Company Name</label>
+              <div
+                class="text-danger small"
+                *ngIf="
+                  submitted &&
+                  registerForm.get('companyName')?.touched &&
+                  registerForm.get('companyName')?.invalid
+                "
+              >
+                Company Name is required
               </div>
-            </form>
-  
-            <!-- Success / Error messages -->
-            <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
-            <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+            </div>
+
+            <!-- Registration Number -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                formControlName="registrationNumber"
+                class="form-control"
+                placeholder="Registration Number"
+              />
+              <label><i class="fas fa-id-card me-2"></i> Registration Number</label>
+              <div
+                class="text-danger small"
+                *ngIf="
+                  submitted &&
+                  registerForm.get('registrationNumber')?.touched &&
+                  registerForm.get('registrationNumber')?.invalid
+                "
+              >
+                Registration Number is required
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid">
+              <button class="btn btn-primary btn-block" type="submit">
+                <i class="fas fa-user-plus me-2"></i> Create Account
+              </button>
+            </div>
+          </form>
+
+          <!-- Success / Error messages -->
+          <div *ngIf="successMessage" class="alert alert-success mt-3">
+            {{ successMessage }}
           </div>
-          <div class="card-footer text-center py-3">
-            <div class="small"><a routerLink="/login">Have an account? Go to login</a></div>
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+        </div>
+
+        <div class="card-footer text-center py-3">
+          <div class="small">
+            <a routerLink="/login">Have an account? Go to login</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

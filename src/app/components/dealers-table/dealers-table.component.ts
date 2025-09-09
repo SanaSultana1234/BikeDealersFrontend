@@ -73,19 +73,34 @@ export class DealersTableComponent {
 
   deleteDealer(dealer: any) {
     const confirmDelete = confirm(
-      `Are you sure you want to delete this dealer?\n\nId: ${dealer.dealerId}\nName: ${dealer.dealerName}\nCity: ${dealer.city}\nState: ${dealer.state}`
+      `Are you sure you want to delete this dealer?
+  
+  Id: ${dealer.dealerId}
+  Name: ${dealer.dealerName}
+  City: ${dealer.city}
+  State: ${dealer.state}`
     );
-
+  
     if (confirmDelete) {
       this.dealerService.deleteDealer(dealer.dealerId).subscribe({
         next: () => {
           console.log('Dealer deleted:', dealer);
           this.dealers = this.dealers.filter((d) => d.dealerId !== dealer.dealerId);
         },
-        error: (err) => console.error('Error deleting dealer:', err)
+        error: (err) => {
+          console.error('Error deleting dealer:', err);
+  
+          // 🚨 Specific error handling
+          if (err.status === 400 || err.status === 409) {
+            alert(`❌ Cannot delete dealer "${dealer.dealerName}" as bikes are already assigned in Dealer Master.`);
+          } else {
+            alert('An unexpected error occurred while deleting the dealer.');
+          }
+        }
       });
     }
   }
+  
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();

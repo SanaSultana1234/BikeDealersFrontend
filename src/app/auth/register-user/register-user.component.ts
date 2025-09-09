@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../Services/auth.service';
 import { UserRegister } from '../../models/auth/user-register';
 import { CommonModule } from '@angular/common';
@@ -19,15 +19,36 @@ export class RegisterUserComponent {
   errorMessage = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
-    this.registerForm = this.fb.group({
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      address: [''],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-    });
+    this.registerForm = this.fb.group(
+      {
+        username: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        address: [''],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/) // 1 uppercase, 1 number, 1 special char
+          ]
+        ],
+        confirmPassword: ['', Validators.required],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
-  
+
+  get f() {
+    return this.registerForm.controls;
+  }
+
+  // Custom validator for password match
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  }
+
   onSubmit() {
     this.submitted = true;
     this.successMessage = '';
@@ -39,17 +60,14 @@ export class RegisterUserComponent {
 
     this.authService.registerUser(userModel).subscribe({
       next: (res) => {
-        console.log(res);
         this.successMessage = res.message || 'User registered successfully!';
         this.registerForm.reset();
         this.submitted = false;
-        this.router.navigate(['login'])
+        this.router.navigate(['login']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Registration failed!';
-        console.error(err);
+        this.errorMessage = err.error?.message || 'Username already exists!';
       }
     });
   }
 }
-

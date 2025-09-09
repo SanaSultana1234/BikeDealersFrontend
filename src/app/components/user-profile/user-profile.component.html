@@ -1,0 +1,64 @@
+<div class="container mt-5" *ngIf="user">
+    <div class="card shadow-lg border-0 rounded-3">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">User Profile</h4>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Username:</label>
+            <p class="form-control-plaintext">{{ user.userName }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Email:</label>
+            <p class="form-control-plaintext">{{ user.email }}</p>
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label class="form-label fw-bold">Address:</label>
+          <p class="form-control-plaintext">{{ user.address || 'N/A' }}</p>
+        </div>
+  
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Store Name:</label>
+            <p class="form-control-plaintext">{{ user.storeName || 'N/A' }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Company Name:</label>
+            <p class="form-control-plaintext">{{ user.companyName || 'N/A' }}</p>
+          </div>
+        </div>
+  
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Dealer Verified:</label>
+            <span class="badge" [ngClass]="user.isDealerVerified ? 'bg-success' : 'bg-danger'">
+              {{ user.isDealerVerified ? 'Yes' : 'No' }}
+            </span>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Manufacturer Verified:</label>
+            <span class="badge" [ngClass]="user.isManufacturerVerified ? 'bg-success' : 'bg-danger'">
+              {{ user.isManufacturerVerified ? 'Yes' : 'No' }}
+            </span>
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label class="form-label fw-bold">Roles:</label>
+          <div>
+            <span *ngFor="let role of user.roles" class="badge bg-info me-2">{{ role }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!user" class="text-center mt-5">
+    <div class="alert alert-danger">
+      You are not authorized to view this page.
+    </div>
+  </div>
+  

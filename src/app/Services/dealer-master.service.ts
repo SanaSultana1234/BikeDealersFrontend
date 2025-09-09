@@ -2,6 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { DealerMasterModel } from '../models/data/dealer-master-model';
+import { BikeModel } from '../models/data/bike-model';
+import { DealerModel } from '../models/data/dealer-model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +11,10 @@ import { DealerMasterModel } from '../models/data/dealer-master-model';
 export class DealerMasterService {
   private baseUrl = 'https://localhost:7273/api/DealerMasters';
   constructor(private http: HttpClient) { }
+
+  getDealerMasterCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/count`);
+  }
 
   getDMs(): Observable<DealerMasterModel[]> {
     return this.http.get<DealerMasterModel[]>(this.baseUrl)
@@ -25,6 +31,16 @@ export class DealerMasterService {
   
   deleteDM(id: Number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  getBikesByDealer(name: String): Observable<BikeModel[]> {
+    return this.http.get<BikeModel[]>(`${this.baseUrl}/dealer?name=${name}`)
+      .pipe(retry(1), catchError(this.errorHandler));
+  }
+  
+  getDealersByBike(name: String): Observable<DealerModel[]> {
+    return this.http.get<DealerModel[]>(`${this.baseUrl}/bike?name=${name}`)
+      .pipe(retry(1), catchError(this.errorHandler));
   }
   
 

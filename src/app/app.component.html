@@ -1,14 +1,26 @@
-<app-navbar></app-navbar>
+<div class="d-flex flex-column min-vh-100">
+  <ng-container *ngIf="authService.isLoggedIn()">
+    <app-navbar></app-navbar>
 
-<div id="layoutSidenav">
-  <div id="layoutSidenav_nav">
-    <app-sidebar></app-sidebar>
-  </div>
+    <div id="layoutSidenav" class="flex-grow-1">
+      <div id="layoutSidenav_nav">
+        <app-sidebar></app-sidebar>
+      </div>
 
-  <div id="layoutSidenav_content">
-    <main class="p-4">
+      <div id="layoutSidenav_content">
+        <main class="p-4 flex-grow-1">
+          <router-outlet></router-outlet>
+        </main>
+      </div>
+    </div>
+
+    <app-footer class="mt-auto"></app-footer>
+  </ng-container>
+
+  <ng-container *ngIf="!authService.isLoggedIn()">
+    <main class="p-4 flex-grow-1">
       <router-outlet></router-outlet>
     </main>
-    <app-footer></app-footer>
-  </div>
+    <app-footer class="mt-auto"></app-footer>
+  </ng-container>
 </div>

@@ -18,8 +18,8 @@ import { Api } from 'datatables.net';   // <-- import Api type
   templateUrl: './bikes-table.component.html',
   styleUrl: './bikes-table.component.css'
 })
-export class BikesTableComponent {
 
+export class BikesTableComponent {
   @ViewChild(DataTableDirective, {static: false})
   dtElement!: DataTableDirective;
 
@@ -27,7 +27,12 @@ export class BikesTableComponent {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
+  selectedBikeIds: number[] = [];
+  showBulkAdd: boolean = false;
+  selectedFile: File | null = null;
+
   constructor(private bikeService: BikeService) {}
+
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -35,68 +40,138 @@ export class BikesTableComponent {
       lengthMenu: [5, 10, 25, 50],
       processing: true
     };
-
     this.getAllBikes();
-    //new simpleDatatables.DataTable(datatablesSimple);
   }
 
   getAllBikes(): void {
-    this.bikeService.getBikes()
-                    .subscribe({
-                        next: (bikes) => {
-                          console.log("Bikes from API:", bikes); 
-                          this.bikes = bikes.map((b: any) => ({ ...b, isEditing: false }));
-                          // Re-render DataTable safely
-                          if (this.dtElement.dtInstance) {
-                            this.dtElement.dtInstance.then((dtInstance: Api) => {
-                              //(dtInstance as unknown as DataTables.Api).destroy();
-                              dtInstance.destroy();  // destroy old instance
-                              this.dtTrigger.next(null); // re-render
-                            });
-                          } else {
-                            this.dtTrigger.next(null);
-                          }
-                        },
-                        error: (err) => {
-                          console.error(err);
-                        }
-                    });
+    this.bikeService.getBikes().subscribe({
+      next: (bikes) => {
+        this.bikes = bikes.map((b: any) => ({ ...b, isEditing: false }));
+        if (this.dtElement.dtInstance) {
+          this.dtElement.dtInstance.then((dtInstance: Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next(null);
+          });
+        } else {
+          this.dtTrigger.next(null);
+        }
+      },
+      error: (err) => console.error(err)
+    });
     this.dtTrigger.next(null);
   }
 
-  toggleEdit(bike: any) {
-    if (bike.isEditing) {
-      // Save mode → call update API
-      this.bikeService.updateBike(bike.bikeId, bike).subscribe({
-        next: (res) => {
-          console.log('Bike updated:', res);
-          bike.isEditing = false;
-          //this.getAllBikes();
-        },
-        error: (err) => console.error('Error updating bike:', err)
-      });
+  // Bulk selection
+  toggleSelection(bikeId: number) {
+    if (this.selectedBikeIds.includes(bikeId)) {
+      this.selectedBikeIds = this.selectedBikeIds.filter(id => id !== bikeId);
     } else {
-      // Switch to edit mode
-      bike.isEditing = true;
+      this.selectedBikeIds.push(bikeId);
     }
   }
 
-  deleteBike(bike: any) {
-    const confirmDelete = confirm(
-      `Are you sure you want to delete this bike?\n\nId: ${bike.bikeId}\nModel: ${bike.modelName}\nYear: ${bike.modelYear}\nEngine: ${bike.engineCc} CC\nManufacturer: ${bike.manufacturer}`
-    );
+  toggleSelectAll(event: any) {
+    if (event.target.checked) {
+      this.selectedBikeIds = this.bikes.map(b => b.bikeId);
+    } else {
+      this.selectedBikeIds = [];
+    }
+  }
 
-    if (confirmDelete) {
-      this.bikeService.deleteBike(bike.bikeId).subscribe({
-        next: () => {
-          console.log('Bike deleted:', bike);
-          this.bikes = this.bikes.filter(b => b.bikeId !== bike.bikeId);
-          //this.getAllBikes()
+  bulkDelete() {
+    if (confirm(`Are you sure you want to delete ${this.selectedBikeIds.length} bikes?`)) {
+      this.bikeService.bulkDeleteBikes(this.selectedBikeIds).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.bikes = this.bikes.filter(b => !this.selectedBikeIds.includes(b.bikeId));
+          this.selectedBikeIds = [];
         },
-        error: (err) => console.error('Error deleting bike:', err)
+        error: (err) => {
+          alert("⚠️ Unable to delete all bikes. Some bikes are linked with deliveries in DealerMaster.")
+          console.error('Bulk delete error:', err)
+        }
       });
     }
   }
+
+  // Bulk Add (Excel upload)
+  toggleBulkAdd() {
+    this.showBulkAdd = !this.showBulkAdd;
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadExcel() {
+    if (this.selectedFile) {
+      this.bikeService.bulkAddBikes(this.selectedFile).subscribe({
+        next: (res) => {
+          alert(`${res.message}, Total: ${res.total}`);
+          this.getAllBikes();
+          this.selectedFile = null;
+          this.showBulkAdd = false;
+        },
+        error: (err) => {
+          console.error('Bulk add error:', err);
+          alert('Error uploading file. Please check the Excel format.');
+        }
+      });
+    }
+  }
+
+  // Edit/Delete single bike (unchanged)
+  toggleEdit(bike: any) { 
+    if (bike.isEditing) { // Save mode → call update API 
+      this.bikeService.updateBike(bike.bikeId, bike)
+      .subscribe({ 
+        next: (res) => { 
+          console.log('Bike updated:', res); 
+          bike.isEditing = false; 
+          //this.getAllBikes(); 
+        }, error: (err) => {
+          console.error('Error updating bike:', err) 
+          // 👇 Specific error handling
+          if (err.status === 404) {
+            alert(`❌ Bike Not Found`);
+          } else {
+            alert('An unexpected error occurred while deleting the bike.');
+          }
+        }
+      }); } else { 
+        // Switch to edit mode 
+        bike.isEditing = true; 
+      } 
+    } 
+    deleteBike(bike: any) {
+      const confirmDelete = confirm(`Are you sure you want to delete this bike?
+      
+    Id: ${bike.bikeId}
+    Model: ${bike.modelName}
+    Year: ${bike.modelYear}
+    Engine: ${bike.engineCc} CC
+    Manufacturer: ${bike.manufacturer}`);
+    
+      if (confirmDelete) {
+        this.bikeService.deleteBike(bike.bikeId).subscribe({
+          next: () => {
+            console.log('Bike deleted:', bike);
+            this.bikes = this.bikes.filter(b => b.bikeId !== bike.bikeId);
+          },
+          error: (err) => {
+            console.error('Error deleting bike:', err);
+    
+            // 👇 Specific error handling
+            if (err.status === 400 || err.status === 409) {
+              alert(`❌ Cannot delete bike "${bike.modelName}" as it is already assigned to a dealer store in Dealer Master.`);
+            } else {
+              alert('An unexpected error occurred while deleting the bike.');
+            }
+          }
+        });
+      }
+    }
+    
 
 
   ngOnDestroy(): void {

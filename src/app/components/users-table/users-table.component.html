@@ -1,72 +1,74 @@
-<div class="card mb-4">
-    <div class="card-header">
-      <i class="fas fa-table me-1"></i>
-      Users Data
-    </div>
-    <div class="card-body">
-      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Store Name</th>
-            <th>Company Name</th>
-            <th>Roles</th>
-            <th>Verified Dealer</th>
-            <th>Verified Manufacturer</th>
-            <th>Dealer Action</th>
-            <th>Manufacturer Action</th>
-            <th>Admin Action</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td>{{ user.id }}</td>
-            <td>{{ user.userName }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.address }}</td>
-            <td>{{ user.storeName }}</td>
-            <td>{{ user.companyName }}</td>
-            <td>{{ user.roles }}</td>
-            <td>{{ user.isDealerVerified }}</td>
-            <td>{{ user.isManufacturerVerified }}</td>
-             <!-- Toggle Dealer -->
-      <td>
-        <button class="btn"
-                [ngClass]="user.isDealerVerified ? 'btn-danger' : 'btn-success'"
-                (click)="toggleDealer(user)">
-          {{ user.isDealerVerified ? 'Remove Dealer' : 'Approve Dealer' }}
-        </button>
-      </td>
+<div class="card mb-4 shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <i class="fas fa-users me-2"></i> Users Data
+  </div>
 
-      <!-- Toggle Manufacturer -->
-      <td>
-        <button class="btn"
-                [ngClass]="user.isManufacturerVerified ? 'btn-danger' : 'btn-success'"
-                (click)="toggleManufacturer(user)">
-          {{ user.isManufacturerVerified ? 'Remove Manufacturer' : 'Approve Manufacturer' }}
-        </button>
-      </td>
+  <div class="card-body">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" 
+           class="table table-bordered table-striped table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Roles</th>
+          <th>Dealer Role</th>
+          <th>Manufacturer Role</th>
+          <th>Admin Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.userName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.address }}</td>
+          <td>
+            <span *ngFor="let role of user.roles" class="badge bg-secondary me-1">
+              <i class="fas fa-user-tag me-1"></i>{{ role }}
+            </span>
+          </td>
 
-      <!-- Toggle Admin -->
-      <td>
-        <button class="btn"
-                [ngClass]="user.roles.includes('Admin') ? 'btn-danger' : 'btn-success'"
-                (click)="toggleAdmin(user)">
-          {{ user.roles.includes('Admin') ? 'Remove Admin' : 'Assign Admin' }}
-        </button>
-      </td>
+          <!-- Toggle Dealer -->
+          <td class="text-center">
+            <button *ngIf="user.id !== '18A52A40-693E-4F0E-B844-842838CA86C8'" 
+                    class="btn btn-sm"
+                    [ngClass]="user.isDealerVerified ? 'btn-danger' : 'btn-success'"
+                    (click)="confirmToggleDealer(user)">
+              {{ user.isDealerVerified ? 'Remove' : 'Assign' }}
+            </button>
+          </td>
 
-      <!-- Edit/Delete -->
-      <td>
-        <!-- <button class="btn btn-warning me-2">Edit</button> -->
-        <button (click)="deleteUser(user)" class="btn btn-danger ms-2">Delete User</button>
-      </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          <!-- Toggle Manufacturer -->
+          <td class="text-center">
+            <button *ngIf="user.id !== '18A52A40-693E-4F0E-B844-842838CA86C8'" 
+                    class="btn btn-sm"
+                    [ngClass]="user.isManufacturerVerified ? 'btn-danger' : 'btn-success'"
+                    (click)="confirmToggleManufacturer(user)">
+              {{ user.isManufacturerVerified ? 'Remove' : 'Assign' }}
+            </button>
+          </td>
+
+          <!-- Toggle Admin -->
+          <td class="text-center">
+            <button *ngIf="user.id !== '18A52A40-693E-4F0E-B844-842838CA86C8'" 
+                    class="btn btn-sm"
+                    [ngClass]="user.roles.includes('Admin') ? 'btn-danger' : 'btn-success'"
+                    (click)="confirmToggleAdmin(user)">
+              {{ user.roles.includes('Admin') ? 'Remove' : 'Assign' }}
+            </button>
+          </td>
+
+          <!-- Delete -->
+          <td class="text-center">
+            <button *ngIf="user.id !== '18A52A40-693E-4F0E-B844-842838CA86C8'" 
+                    class="btn btn-danger btn-sm"
+                    (click)="confirmDeleteUser(user)">
+              <i class="fas fa-trash-alt me-1"></i> Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

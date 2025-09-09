@@ -1,0 +1,82 @@
+<div class="container mt-4">
+
+  <!-- Search Bar -->
+  <div class="input-group mb-4 w-75 mx-auto">
+    <span class="input-group-text bg-primary text-white">
+      <i class="fas fa-search"></i>
+    </span>
+    <input type="text"
+           class="form-control bg-light text-dark"
+           placeholder="Search bike by name..."
+           [(ngModel)]="searchText"
+           (input)="searchBikes()" />
+  </div>
+
+  <!-- Bike Cards -->
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let bike of filteredBikes">
+      <div class="card h-100 shadow-lg border-0"
+           (click)="openBikeDealers(bike)"
+           style="cursor:pointer;">
+        
+        <div class="card-body text-center">
+          <h5 class="card-title text-primary mb-2">
+            <i class="fas fa-motorcycle me-2"></i>{{ bike.modelName }}
+          </h5>
+          <p class="card-text text-muted">
+            <i class="fas fa-cogs text-secondary me-2"></i>
+            <strong>Engine:</strong> {{ bike.engineCc }} CC
+            <!-- <br>
+            <i class="fas fa-rupee-sign text-success me-2"></i>
+            <strong>Price:</strong> ₹{{ bike.price }} -->
+          </p>
+        </div>
+        
+        <div class="card-footer bg-light text-center">
+          <small class="text-secondary">
+            <i class="fas fa-store-alt me-1"></i>View Dealers
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Bike Dealers -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="showModal"
+     style="background-color: rgba(0,0,0,0.6);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg border-0">
+      
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-store me-2"></i>Dealers for {{ selectedBike?.modelName }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white"
+                (click)="closeModal()"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div *ngIf="bikeDealers.length > 0; else noDealers">
+          <ul class="list-group">
+            <li *ngFor="let dealer of bikeDealers"
+                class="list-group-item d-flex justify-content-between align-items-center">
+              <span>
+                <i class="fas fa-building text-primary me-2"></i>
+                <strong>{{ dealer.dealerName }}</strong>
+              </span>
+              <span class="text-muted">
+                <i class="fas fa-map-marker-alt text-danger me-1"></i>{{ dealer.address }}
+              </span>
+            </li>
+          </ul>
+        </div>
+        <ng-template #noDealers>
+          <p class="text-muted text-center">
+            <i class="fas fa-exclamation-circle me-2"></i>No dealers found for this bike.
+          </p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

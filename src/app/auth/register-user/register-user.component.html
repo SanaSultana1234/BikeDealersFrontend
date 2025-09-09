@@ -1,57 +1,92 @@
 <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="card shadow-lg border-0 rounded-lg">
-          <div class="card-header">
-            <h3 class="text-center font-weight-light my-4">Create User Account</h3>
-          </div>
-          <div class="card-body">
-            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-              
-              <div class="form-floating mb-3">
-                <input formControlName="username" class="form-control" placeholder="Username" />
-                <label>Username</label>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-primary text-white">
+          <h3 class="text-center font-weight-light my-2">
+            <i class="bi bi-person-plus-fill me-2"></i>Create User Account
+          </h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+            
+            <!-- Username -->
+            <div class="form-floating mb-3">
+              <input formControlName="username" class="form-control" placeholder="Username" />
+              <label><i class="bi bi-person-circle me-2"></i>Username</label>
+              <div *ngIf="submitted && f['username'].errors" class="text-danger small mt-1">
+                <span *ngIf="f['username'].errors['required']">Username is required</span>
               </div>
-  
-              <div class="form-floating mb-3">
-                <input formControlName="email" type="email" class="form-control" placeholder="name@example.com" />
-                <label>Email address</label>
-              </div>
-  
-              <div class="form-floating mb-3">
-                <input formControlName="address" class="form-control" placeholder="Enter Address" />
-                <label>Address</label>
-              </div>
-  
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="password" formControlName="password" class="form-control" placeholder="Password" />
-                    <label>Password</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" />
-                    <label>Confirm Password</label>
-                  </div>
-                </div>
-              </div>
+            </div>
 
-              <div class="d-grid">
-                <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+            <!-- Email -->
+            <div class="form-floating mb-3">
+              <input formControlName="email" type="email" class="form-control" placeholder="name@example.com" />
+              <label><i class="bi bi-envelope-fill me-2"></i>Email Address</label>
+              <div *ngIf="submitted && f['email'].errors" class="text-danger small mt-1">
+                <span *ngIf="f['email'].errors['required']">Email is required</span>
+                <span *ngIf="f['email'].errors['email']">Invalid email format</span>
               </div>
-            </form>
-  
-            <!-- Success / Error messages -->
-            <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
-            <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+            </div>
+
+            <!-- Address -->
+            <div class="form-floating mb-3">
+              <input formControlName="address" class="form-control" placeholder="Enter Address" />
+              <label><i class="bi bi-geo-alt-fill me-2"></i>Address</label>
+            </div>
+
+            <!-- Passwords -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="password" formControlName="password" class="form-control" placeholder="Password" />
+                  <label><i class="bi bi-lock-fill me-2"></i>Password</label>
+                  <div *ngIf="submitted && f['password'].errors" class="text-danger small mt-1">
+                    <span *ngIf="f['password'].errors['required']">Password is required</span>
+                    <span *ngIf="f['password'].errors['minlength']">Minimum 8 characters</span>
+                    <span *ngIf="f['password'].errors['pattern']">
+                      Must contain 1 uppercase, 1 number & 1 special character
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                  <label><i class="bi bi-shield-lock-fill me-2"></i>Confirm Password</label>
+                  <div *ngIf="submitted && f['confirmPassword'].errors" class="text-danger small mt-1">
+                    <span *ngIf="f['confirmPassword'].errors['required']">Confirm Password is required</span>
+                  </div>
+                  <div *ngIf="submitted && registerForm.errors?.['passwordMismatch']" class="text-danger small mt-1">
+                    Passwords do not match
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button class="btn btn-primary btn-block" type="submit">
+                <i class="bi bi-person-check-fill me-2"></i>Create Account
+              </button>
+            </div>
+          </form>
+
+          <!-- Success / Error messages -->
+          <div *ngIf="successMessage" class="alert alert-success mt-3">
+            {{ successMessage }}
           </div>
-          <div class="card-footer text-center py-3">
-            <div class="small"><a routerLink="/login">Have an account? Go to login</a></div>
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+        </div>
+        <div class="card-footer text-center py-3">
+          <div class="small">
+            <a routerLink="/login"><i class="bi bi-box-arrow-in-right me-2"></i>Already have an account? Login</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

@@ -1,0 +1,158 @@
+ <!-- Hero Section -->
+ <section class="hero">
+    <div class="hero-content">
+        <h1>Premium Bike Dealer Management Solution</h1>
+        <p>Streamline your dealership operations with our comprehensive management system designed specifically for bike dealers.</p>
+        <div class="cta-buttons" *ngIf="!loggedIn">
+            <a routerLink="/register" class="cta-button cta-primary">Register Now</a>
+            <a routerLink="/login" class="cta-button cta-secondary">Login</a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="section-title">
+        <h2>Why Choose Our System</h2>
+        <p>Our bike dealer management system offers everything you need to run your dealership efficiently</p>
+    </div>
+    <div class="feature-cards">
+        <div class="feature-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Sales Management</h3>
+            <p>Track sales, manage invoices, and monitor performance with our comprehensive sales tools.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-cogs"></i>
+            <h3>Inventory Control</h3>
+            <p>Keep track of your bike inventory, parts, and accessories in real-time.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-users"></i>
+            <h3>Customer Management</h3>
+            <p>Maintain customer records, service history, and communication all in one place.</p>
+        </div>
+    </div>
+</section>
+<!-- Bike Showcase
+<section class="bike-showcase">
+    <div class="section-title">
+        <h2>Find What You Need</h2>
+        <p>Search for dealers based on bikes or bikes based on dealers</p>
+    </div>
+    <div class="bike-grid">
+        <div class="bike-card" (click)="navigateTo('/getDealersByBike')">
+            <img src="https://mediapool.bmwgroup.com/cache/P9/202409/P90566401/P90566401-krishna-automobiles-ludhiana-dealership-09-2024-599px.jpg" alt="Bike Dealers">
+            <div class="bike-info">
+                <h3>Find Dealers by Bike</h3>
+                <p>Search for dealers that have a specific bike model in their inventory</p>
+            </div>
+        </div>
+
+        <div class="bike-card" (click)="navigateTo('/getBikesByDealer')">
+            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Adventure Bike">
+            <div class="bike-info">
+               <h3>Find Bikes by Dealer</h3>
+               <p>Discover all bikes available at a specific dealership</p>
+            </div>
+        </div>
+    </div>
+</section> -->
+ <!-- Bike Showcase -->
+<section class="bike-showcase">
+    <div class="section-title">
+        <h2>Find What You Need</h2>
+        <p>Search for dealers based on bikes or bikes based on dealers</p>
+    </div>
+    <div class="bike-grid">
+        <div class="bike-card" (click)="navigateTo('/getDealersByBike')">
+            <img src="https://mediapool.bmwgroup.com/cache/P9/202409/P90566401/P90566401-krishna-automobiles-ludhiana-dealership-09-2024-599px.jpg" alt="Bike Dealers">
+            <div class="bike-info">
+                <h3>Find Dealers by Bike</h3>
+                <p>Search for dealers that have a specific bike model in their inventory</p>
+            </div>
+        </div>
+  
+        <div class="bike-card" (click)="navigateTo('/getBikesByDealer')">
+            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Adventure Bike">
+            <div class="bike-info">
+               <h3>Find Bikes by Dealer</h3>
+               <p>Discover all bikes available at a specific dealership</p>
+            </div>
+        </div>
+    </div>
+  </section>
+  
+  <!-- Login Required Modal -->
+  <div class="modal fade" [class.show]="showLoginModal" [style.display]="showLoginModal ? 'block' : 'none'" tabindex="-1" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login Required</h5>
+                <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please log in to use this feature.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  <!-- Backdrop -->
+  <div *ngIf="showLoginModal" class="modal-backdrop fade show"></div>
+  
+  
+
+<!-- Contact Section -->
+<section  class="contact">
+    <div id="contact" class="section-title">
+        <h2>Contact Us</h2>
+        <p>Get in touch with us for more information about our bike dealer management system</p>
+    </div>
+    <div class="contact-container">
+        <div class="contact-info">
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>
+                    <h3>Our Location</h3>
+                    <p>123 Motorcycle Avenue, Bike City, BC 12345</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <div>
+                    <h3>Phone Number</h3>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <div>
+                    <h3>Email Address</h3>
+                    <p>admin&#64;bikedekho.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="contact-form">
+            <form (submit)="sendMail($event)">
+              <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" placeholder="Enter your name" [(ngModel)]="formData.name" name="name">
+              </div>
+              <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" placeholder="Enter your email" [(ngModel)]="formData.email" name="email">
+              </div>
+              <div class="form-group">
+                <label for="message">Your Message</label>
+                <textarea id="message" placeholder="Enter your message" [(ngModel)]="formData.message" name="message"></textarea>
+              </div>
+              <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+          </div>
+          
+    </div>
+</section>

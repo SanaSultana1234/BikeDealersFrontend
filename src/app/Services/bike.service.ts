@@ -8,9 +8,14 @@ import { BikeModel } from '../models/data/bike-model';
 })
 export class BikeService {
   private baseUrl = 'https://localhost:7273/api/Bikes'; 
+  private bulkUrl = 'https://localhost:7273/api/Bulk';
   errorMessage: string = '';
 
   constructor(private http: HttpClient) { }
+
+  getBikeCount(): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/count`);
+  }
 
   getBikes(): Observable<BikeModel[]> {
     return this.http.get<BikeModel[]>(this.baseUrl)
@@ -19,6 +24,12 @@ export class BikeService {
         catchError(this.errorHandler)
       );
   }
+
+  getBikesByName(name: string): Observable<BikeModel[]> {
+    return this.http.get<BikeModel[]>(`${this.baseUrl}/search?name=${name}`)
+      .pipe(retry(1), catchError(this.errorHandler));
+  }
+  
 
   addBike(bike: any): Observable<any> {
     return this.http.post<any>(this.baseUrl, bike);
@@ -30,6 +41,18 @@ export class BikeService {
 
   deleteBike(id: Number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  }
+
+   // Existing CRUD ...
+
+   bulkAddBikes(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http.post(`${this.bulkUrl}/AddBikes`, formData);
+  }
+
+  bulkDeleteBikes(ids: number[]): Observable<any> {
+    return this.http.post(`${this.bulkUrl}/DeleteBikes`, ids);
   }
 
   private errorHandler(error: HttpErrorResponse) {

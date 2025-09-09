@@ -1,75 +1,172 @@
 <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="card shadow-lg border-0 rounded-lg">
-          <div class="card-header">
-            <h3 class="text-center font-weight-light my-4">Create Dealer Account</h3>
-          </div>
-          <div class="card-body">
-            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-              
-              <div class="form-floating mb-3">
-                <input formControlName="username" class="form-control" placeholder="Dealer" />
-                <label>Dealer Username</label>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-primary text-white">
+          <h3 class="text-center my-3">
+            <i class="bi bi-shop"></i> Create Dealer Account
+          </h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <!-- Username -->
+            <div class="form-floating mb-3 position-relative">
+              <input
+                formControlName="username"
+                class="form-control"
+                placeholder="Dealer Username" />
+              <label><i class="bi bi-person-circle me-2"></i> Dealer Username</label>
+              <div
+                class="text-danger small mt-1"
+                *ngIf="submitted && f['username'].errors">
+                This field is required
               </div>
-  
-              <div class="form-floating mb-3">
-                <input formControlName="email" type="email" class="form-control" placeholder="name@example.com" />
-                <label>Email address</label>
+            </div>
+
+            <!-- Email -->
+            <div class="form-floating mb-3 position-relative">
+              <input
+                formControlName="email"
+                type="email"
+                class="form-control"
+                placeholder="name@example.com" />
+              <label><i class="bi bi-envelope-at me-2"></i> Email address</label>
+              <div class="text-danger small mt-1" *ngIf="submitted && f['email'].errors">
+                <span *ngIf="f['email'].errors?.['required']">This field is required</span>
+                <span *ngIf="f['email'].errors?.['email']">Enter a valid email</span>
               </div>
-  
-              <div class="form-floating mb-3">
-                <input formControlName="address" class="form-control" placeholder="Enter Address" />
-                <label>Address</label>
+            </div>
+
+            <!-- Address -->
+            <div class="form-floating mb-3">
+              <input formControlName="address" class="form-control" placeholder="Enter Address" />
+              <label><i class="bi bi-geo-alt me-2"></i> Address</label>
+              <div class="text-danger small mt-1" *ngIf="submitted && f['address'].errors">
+                This field is required
               </div>
-  
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="password" formControlName="password" class="form-control" placeholder="Password" />
-                    <label>Password</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating mb-3">
-                    <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" />
-                    <label>Confirm Password</label>
-                  </div>
-                </div>
-              </div>
+            </div>
+
+            <!-- Password + Confirm -->
+            <div class="row mb-3">
+              <div class="col-md-6">
                 <div class="form-floating mb-3">
-                    <input type="text" formControlName="storeName" class="form-control" placeholder="Store Name" />
-                    <label> Store Name</label>
+                  <input
+                    type="password"
+                    formControlName="password"
+                    class="form-control"
+                    placeholder="Password" />
+                  <label><i class="bi bi-lock-fill me-2"></i> Password</label>
+                  <div class="text-danger small" 
+                    *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+                  <span *ngIf="registerForm.get('password')?.errors?.['required']">
+                    Password is required
+                  </span>
+                  <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
+                    Password must be at least 8 characters long
+                  </span>
+                  <span *ngIf="registerForm.get('password')?.errors?.['pattern']">
+                    Password must contain at least 1 uppercase letter, 1 number, and 1 special character
+                  </span>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                      <div class="form-floating mb-3">
-                        <input type="number" formControlName="storageCapacity" class="form-control" placeholder="Storage Capacity" />
-                        <label>Storage Capacity</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-floating mb-3">
-                        <input type="number" formControlName="inventory" class="form-control" placeholder="Inventory" />
-                        <label>Inventory</label>
-                      </div>
-                    </div>
+                </div>
               </div>
-              <div class="d-grid">
-                <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input
+                    type="password"
+                    formControlName="confirmPassword"
+                    class="form-control"
+                    placeholder="Confirm Password" />
+                  <label><i class="bi bi-shield-lock-fill me-2"></i> Confirm Password</label>
+                  <div
+                    class="text-danger small mt-1"
+                    *ngIf="submitted && (f['confirmPassword'].errors || registerForm.errors?.['passwordMismatch'])">
+                    <span *ngIf="f['confirmPassword'].errors?.['required']">
+                      This field is required
+                    </span>
+                    <span *ngIf="registerForm.errors?.['passwordMismatch']">
+                      Passwords do not match
+                    </span>
+                  </div>
+                </div>
               </div>
-            </form>
-  
-            <!-- Success / Error messages -->
-            <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
-            <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+            </div>
+
+            <!-- Store Name -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                formControlName="storeName"
+                class="form-control"
+                placeholder="Store Name" />
+              <label><i class="bi bi-building me-2"></i> Store Name</label>
+              <div class="text-danger small mt-1" *ngIf="submitted && f['storeName'].errors">
+                This field is required
+              </div>
+            </div>
+
+            <!-- Storage + Inventory -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input
+                    type="number"
+                    formControlName="storageCapacity"
+                    class="form-control"
+                    placeholder="Storage Capacity" />
+                  <label><i class="bi bi-box-seam me-2"></i> Storage Capacity</label>
+                  <div
+                    class="text-danger small mt-1"
+                    *ngIf="submitted && f['storageCapacity'].errors">
+                    This field is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <input
+                    type="number"
+                    formControlName="inventory"
+                    class="form-control"
+                    placeholder="Inventory" />
+                  <label><i class="bi bi-archive-fill me-2"></i> Inventory</label>
+                  <div
+                    class="text-danger small mt-1"
+                    *ngIf="submitted && (f['inventory'].errors || registerForm.errors?.['inventoryExceeds'])">
+                    <span *ngIf="f['inventory'].errors?.['required']">This field is required</span>
+                    <span *ngIf="registerForm.errors?.['inventoryExceeds']">
+                      Inventory cannot be greater than storage capacity
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid">
+              <button class="btn btn-primary btn-block" type="submit">
+                <i class="bi bi-person-plus-fill me-2"></i> Create Account
+              </button>
+            </div>
+          </form>
+
+          <!-- Success / Error messages -->
+          <div *ngIf="successMessage" class="alert alert-success mt-3">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
           </div>
-          <div class="card-footer text-center py-3">
-            <div class="small"><a routerLink="/login">Have an account? Go to login</a></div>
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
+          </div>
+        </div>
+        <div class="card-footer text-center py-3">
+          <div class="small">
+            <a routerLink="/login" class="text-decoration-none text-primary">
+              Already have an account? Login here
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>
