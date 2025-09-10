@@ -21,6 +21,11 @@ export class DealerMasterService {
             .pipe(retry(1), catchError(this.errorHandler));
   }
 
+  getDMById(id: Number): Observable<DealerMasterModel> {
+    return this.http.get<DealerMasterModel>(`${this.baseUrl}/${id}`)
+            .pipe(retry(1), catchError(this.errorHandler));
+  }
+
   addDM(dm: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}`, dm);
   }

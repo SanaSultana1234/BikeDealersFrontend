@@ -27,47 +27,24 @@
       <tbody>
         <tr *ngFor="let dm of DMs">
           <td>{{ dm.dealerMasterId }}</td>
-
-          <!-- Dealer ID -->
-          <td *ngIf="!dm.isEditing">{{ dm.dealerId }}</td>
-          <td *ngIf="dm.isEditing">
-            <input [(ngModel)]="dm.dealerId" class="form-control form-control-sm" />
-          </td>
-
-          <!-- Bike ID -->
-          <td *ngIf="!dm.isEditing">{{ dm.bikeId }}</td>
-          <td *ngIf="dm.isEditing">
-            <input [(ngModel)]="dm.bikeId" class="form-control form-control-sm" />
-          </td>
-
-          <!-- Bikes Delivered -->
-          <td *ngIf="!dm.isEditing">{{ dm.bikesDelivered }}</td>
-          <td *ngIf="dm.isEditing">
-            <input [(ngModel)]="dm.bikesDelivered" type="number" class="form-control form-control-sm" />
-          </td>
-
-          <!-- Delivery Date -->
-          <td *ngIf="!dm.isEditing">{{ dm.deliveryDate | date: 'yyyy-MM-dd' }}</td>
-          <td *ngIf="dm.isEditing">
-            <input [(ngModel)]="dm.deliveryDate" type="date" class="form-control form-control-sm" />
-          </td>
+          <td>{{ dm.dealerId }}</td>
+          <td>{{ dm.bikeId }}</td>
+          <td>{{ dm.bikesDelivered }}</td>
+          <td>{{ dm.deliveryDate | date: 'yyyy-MM-dd' }}</td>
 
           <!-- Actions -->
           <td>
             <button
-              *ngIf="!dm.isEditing"
-              (click)="onEdit(dm)"
-              class="btn btn-sm btn-warning me-2"
-            >
+            class="btn btn-sm btn-info me-2"
+            (click)="onView(dm)"
+          >
+            <i class="fas fa-eye"></i> View
+          </button>
+          <button
+          class="btn btn-sm btn-warning me-2"
+          (click)="onEdit(dm)"
+        >
               <i class="fas fa-edit"></i> Edit
-            </button>
-
-            <button
-              *ngIf="dm.isEditing"
-              (click)="onSave(dm)"
-              class="btn btn-sm btn-success me-2"
-            >
-              <i class="fas fa-check"></i> Save
             </button>
 
             <button
@@ -80,5 +57,43 @@
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="viewModalLabel">Dealer & Bike Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedDM">
+          <h6><i class="fas fa-store me-2"></i> Dealer Info</h6>
+          <p><strong>Name:</strong> {{ dealerDetail?.dealerName }}</p>
+          <p><strong>Address:</strong> {{ dealerDetail?.address }}</p>
+          <p><strong>City:</strong> {{ dealerDetail?.city }}</p>
+          <p><strong>State:</strong> {{ dealerDetail?.state }}</p>
+          <p><strong>Zip Code:</strong> {{ dealerDetail?.zipCode }}</p>
+          <p><strong>Storage Capacity:</strong> {{ dealerDetail?.storageCapacity }}</p>
+          <p><strong>Inventory:</strong> {{ dealerDetail?.inventory }}</p>
+        
+          <hr>
+
+          <h6><i class="fas fa-motorcycle me-2"></i> Bike Info</h6>
+          <p><strong>Model Name:</strong> {{ bikeDetail?.modelName }}</p>
+          <p><strong>Model Year:</strong> {{ bikeDetail?.modelYear }}</p>
+          <p><strong>Engine CC:</strong> {{ bikeDetail?.engineCc }}</p>
+          <p><strong>Manufacturer:</strong> {{ bikeDetail?.manufacturer }}</p>
+          
+        </div>
+        <div *ngIf="!selectedDM" class="text-center">
+          <i class="fas fa-spinner fa-spin fa-2x"></i> Loading...
+        </div>
+      </div>
+    </div>
   </div>
 </div>

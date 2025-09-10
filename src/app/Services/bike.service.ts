@@ -25,6 +25,14 @@ export class BikeService {
       );
   }
 
+  getBikeById(id: any): Observable<BikeModel> {
+    return this.http.get<BikeModel>(`${this.baseUrl}/${id}`)
+      .pipe(
+        retry(1), // retry once before failing
+        catchError(this.errorHandler)
+      );
+  }
+
   getBikesByName(name: string): Observable<BikeModel[]> {
     return this.http.get<BikeModel[]>(`${this.baseUrl}/search?name=${name}`)
       .pipe(retry(1), catchError(this.errorHandler));

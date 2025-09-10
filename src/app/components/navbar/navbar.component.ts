@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../Services/auth.service'; // adjust path if needed
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 
 @Component({
   selector: 'app-navbar',

@@ -21,6 +21,7 @@ import { GetBikesByDealersComponent } from './components/get-bikes-by-dealers/ge
 import { GetDealersByBikesComponent } from './components/get-dealers-by-bikes/get-dealers-by-bikes.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { EditDMComponent } from './components/edit-dm/edit-dm.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },  // default redirect
@@ -49,6 +50,7 @@ export const routes: Routes = [
     {path: "dmTable", component: DealerMasterTableComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Manufacturer']}},
     {path: "addBike", component: AddBikeComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Manufacturer']}},
     {path: "addDM", component: AddDMComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Manufacturer']}},
+    { path: 'editDM/:id', component: EditDMComponent },
     {path: "dealerProfile", component: DealerProfileComponent, canActivate: [authGuard], data: {roles: ['Dealer']}},
     {path: "test", component: TestComponent, canActivate: [authGuard], data: {roles: ['Admin']}},
     {path: "unauthorized", component: UnauthorizedComponentComponent},

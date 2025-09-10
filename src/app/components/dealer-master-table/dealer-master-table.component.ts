@@ -8,6 +8,10 @@ import { FormsModule } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Api } from 'datatables.net';
 import { RouterLink } from '@angular/router';
+import { DealerService } from '../../Services/dealer.service';
+import { BikeService } from '../../Services/bike.service';
+import { Modal } from 'bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dealer-master-table',
@@ -24,7 +28,13 @@ export class DealerMasterTableComponent {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private dmService: DealerMasterService) {}
+  selectedDM: any = null;
+  dealerDetail: any = null;
+  bikeDetail: any = null;
+
+  constructor(private dmService: DealerMasterService,  
+    private dealerService: DealerService,
+    private bikeService: BikeService, private router: Router) {}
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -59,9 +69,40 @@ export class DealerMasterTableComponent {
     this.dtTrigger.next(null);
   }
 
-  onEdit(dm: any): void {
-    dm.isEditing = true;
+  onView(dm: any) {
+    this.selectedDM = dm;
+    this.dealerDetail = null;
+    this.bikeDetail = null;
+
+    // Fetch dealer details
+    this.dealerService.getDealerByUserId(dm.dealerId).subscribe({
+      next: (dealer) => {
+        this.dealerDetail = dealer
+        console.log(dealer);
+      },
+      error: (err) => console.error(err)
+    });
+
+    // Fetch bike details
+    this.bikeService.getBikeById(dm.bikeId).subscribe({
+      next: (bike) => {
+        this.bikeDetail = bike;
+        console.log(bike);
+      },
+      error: (err) => console.error(err)
+    });
+
+    // Show Bootstrap Modal
+    const modalEl = document.getElementById('viewModal');
+    const modal = new Modal(modalEl!);
+    modal.show();
   }
+
+  onEdit(dm: any): void {
+    // Navigate to editDM page with the DM id
+    this.router.navigate(['/editDM', dm.dealerMasterId]);
+  }
+  
 
   onSave(dm: any): void {
     this.dmService.updateDM(dm.dealerMasterId, dm)
