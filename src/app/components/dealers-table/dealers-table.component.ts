@@ -64,7 +64,15 @@ export class DealersTableComponent {
           console.log('Dealer updated:', res);
           dealer.isEditing = false;
         },
-        error: (err) => console.error('Error updating dealer:', err)
+        error: (err) => {
+          console.error('Error updating dealer:', err);
+
+          if (err.status === 403) {
+            alert('❌ You do not have permission to perform this operation.');
+          } else {
+            alert('⚠️ Something went wrong while updating the dealer.');
+          }
+        }
       });
     } else {
       dealer.isEditing = true;
@@ -89,12 +97,13 @@ export class DealersTableComponent {
         },
         error: (err) => {
           console.error('Error deleting dealer:', err);
-  
-          // 🚨 Specific error handling
-          if (err.status === 400 || err.status === 409) {
+
+          if (err.status === 403) {
+            alert('❌ You do not have permission to perform this operation.');
+          } else if (err.status === 400 || err.status === 409) {
             alert(`❌ Cannot delete dealer "${dealer.dealerName}" as bikes are already assigned in Dealer Master.`);
           } else {
-            alert('An unexpected error occurred while deleting the dealer.');
+            alert('⚠️ Something went wrong while deleting the dealer.');
           }
         }
       });

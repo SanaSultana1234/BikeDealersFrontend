@@ -113,6 +113,12 @@ export class DealerMasterTableComponent {
         },
         error: (err) => {
           console.error('Error updating DM:', err);
+
+          if (err.status === 403) {
+            alert('❌ You do not have permission to perform this operation.');
+          } else {
+            alert('⚠️ Something went wrong while updating Dealer Master.');
+          }
         }
       });
   }
@@ -126,6 +132,12 @@ export class DealerMasterTableComponent {
           },
           error: (err) => {
             console.error('Error deleting DM:', err);
+
+            if (err.status === 403) {
+              alert('❌ You do not have permission to perform this operation.');
+            } else {
+              alert('⚠️ Something went wrong while deleting Dealer Master.');
+            }
           }
         });
     }

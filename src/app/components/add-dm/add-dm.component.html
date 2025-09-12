@@ -45,7 +45,7 @@
   
       <div class="form-group mb-3">
         <label for="deliveryDate">Delivery Date</label>
-        <input type="date" id="deliveryDate" formControlName="deliveryDate" class="form-control" />
+        <input type="date" id="deliveryDate" formControlName="deliveryDate" class="form-control" [min]="today" />
       </div>
   
       <button type="submit" class="btn btn-primary" [disabled]="addDMForm.invalid">Deliver Bikes</button>

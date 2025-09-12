@@ -22,6 +22,7 @@ import { GetDealersByBikesComponent } from './components/get-dealers-by-bikes/ge
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { EditDMComponent } from './components/edit-dm/edit-dm.component';
+import { GoogleLoginComponent } from './components/google-login/google-login.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },  // default redirect
@@ -42,12 +43,13 @@ export const routes: Routes = [
     {path: "registerDealer", component: RegisterDealerComponent},
     {path: "registerManufacturer", component: RegisterManufacturerComponent},
     {path: "login", component: LoginComponent},
+    { path: 'googleLogin', component: GoogleLoginComponent },
  
     {path: "table", component: TableComponent},
     {path: "usersTable", component: UsersTableComponent, canActivate: [authGuard], data: {roles: ['Admin']}},
     {path: "bikesTable", component: BikesTableComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Manufacturer']}},
     {path: "dealersTable", component: DealersTableComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Dealer']}},
-    {path: "dmTable", component: DealerMasterTableComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Manufacturer']}},
+    {path: "dmTable", component: DealerMasterTableComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Dealer', 'Manufacturer']}},
     {path: "addBike", component: AddBikeComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Manufacturer']}},
     {path: "addDM", component: AddDMComponent, canActivate: [authGuard], data: {roles: ['Admin', 'Manufacturer']}},
     { path: 'editDM/:id', component: EditDMComponent },

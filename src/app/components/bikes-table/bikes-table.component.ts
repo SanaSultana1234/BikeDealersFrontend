@@ -58,7 +58,7 @@ export class BikesTableComponent {
       },
       error: (err) => console.error(err)
     });
-    this.dtTrigger.next(null);
+    //this.dtTrigger.next(null);
   }
 
   // Bulk selection

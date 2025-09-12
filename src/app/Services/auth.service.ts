@@ -7,6 +7,7 @@ import { UserRegister } from '../models/auth/user-register';
 import { LoginModel } from '../models/auth/login-model';
 import { BikeModel } from '../models/data/bike-model';
 import { UserModel } from '../models/data/user-model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,14 @@ export class AuthService {
   email: string | null =null;
   errorMessage: string ='';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
+
+  loginWithGoogle(idToken: string) {
+    return this.http.post<any>(`${this.baseUrl}/external-login`, {
+      provider: 'Google',
+      idToken
+    });
+  }
 
   login(loginUser: LoginModel): Observable<any> {
     console.log(this.baseUrl+' User Name: '+ loginUser.username);
@@ -39,6 +47,10 @@ export class AuthService {
         }
       })
     )
+  }
+
+  saveToken(token: string) {
+    localStorage.setItem('Token', token);
   }
 
   getUserName(): string | null {

@@ -17,6 +17,7 @@ import { DealerMasterModel } from '../../models/data/dealer-master-model';
 })
 export class AddDMComponent {
   addDMForm: FormGroup;
+  today: string = '';
 
   bikes: any[] = [];   // will store list of bikes
   dealers: any[] = []; // will store list of dealers
@@ -40,6 +41,9 @@ export class AddDMComponent {
   ngOnInit(): void {
     this.loadBikes();
     this.loadDealers();
+
+    const now = new Date();
+    this.today = now.toISOString().split('T')[0];
 
      // Watch dealerId selection and update selectedDealer
      this.addDMForm.get('dealerId')?.valueChanges.subscribe((dealerId) => {

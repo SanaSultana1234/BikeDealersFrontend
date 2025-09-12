@@ -5,11 +5,12 @@ import { AuthService } from '../../Services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import {CommonModule} from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { GoogleLoginComponent } from "../../components/google-login/google-login.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, RouterLink, GoogleLoginComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

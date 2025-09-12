@@ -112,7 +112,11 @@ export class EditDMComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error updating DM:', err);
-          alert('Failed to update DM. Try again later.');
+          if (err.status === 403) {
+            alert('❌ You do not have permission to update this Dealer Master.');
+          } else {
+            alert('⚠️ Something went wrong while updating Dealer Master.');
+          }
         }
       });
     }
